@@ -9,10 +9,11 @@ import SwiftUI
 
 struct DetailView: View {
     var pokemon: Pokemon
-    @Binding var favorites: [Pokemon]
-    
+    @Binding public var favorites: [Pokemon]
     @State private var showingAlert = false
     @State private var alertType: AlertType = .added
+    @State private var spriteURL: String? = nil
+    @Environment(\.presentationMode) var presentationMode
     
     enum AlertType {
         case added, removed
@@ -20,8 +21,21 @@ struct DetailView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Text(pokemon.name.capitalized)
-                .font(.largeTitle)
+            
+            if let urlString = spriteURL, let url = URL(string: urlString) {
+                AsyncImage(url: url) { image in
+                    image.resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                } placeholder: {
+                    ProgressView()
+                }
+            }
+            
+            VStack {
+                Text(pokemon.name.capitalized)
+                    .font(.largeTitle)
+            }
             
             if !favorites.contains(where: { $0.name == pokemon.name }) {
                 Button("Add to Favorites") {
@@ -40,10 +54,33 @@ struct DetailView: View {
                 }
                 .background(Color.yellow)
             }
+//            Button("Back to Browse") {
+//                presentationMode.wrappedValue.dismiss()
+//            }
         }
         .padding()
+        .onAppear() {
+            fetchPokemonDetail()
+        }
         .alert(alertType == .added ? "Added!" : "Removed!", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {}
         }
     }
+    
+    func fetchPokemonDetail() {
+        guard let url = URL(string: pokemon.url) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error  in
+            guard let data = data else { return }
+            
+            if let detail = try? JSONDecoder().decode(PokemonDetail.self, from: data),
+               let imageURL = detail.sprites.front_default {
+                DispatchQueue.main.async {
+                    self.spriteURL = imageURL
+                }
+            }
+        }.resume()
+    }
+    
+
 }

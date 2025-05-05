@@ -12,6 +12,8 @@ struct Pokemon: Codable, Identifiable {
     let id = UUID()
     let name: String
     let url: String
+//    let height: Int
+//    let width: Int
     
     var spriteURL: String?
     

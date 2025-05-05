@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct PokemonAPI_APPApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

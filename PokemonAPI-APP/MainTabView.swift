@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct MainTabView: View {
+    
+    @State var favorites: [Pokemon] = []
+    
     var body: some View {
         TabView {
-            BrowseView()
+            BrowseView(favorites: $favorites)
                 .tabItem {
                     Label("Browse", systemImage: "list.bullet")
                 }
-            FavoritesView()
+            FavoritesView(favorites: $favorites)
                 .tabItem {
                     Label("Favorites", systemImage: "star.fill")
                 }

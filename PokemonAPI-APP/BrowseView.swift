@@ -1,6 +1,6 @@
 //
 //  BrowseView.swift
-//  PokemonAPI-APP
+//  PokemonAPI-API
 //
 //  Created by VOLKMAR, RANDALL S. on 4/28/25.
 //
@@ -10,7 +10,8 @@ import SwiftUI
 struct BrowseView: View {
     @State private var pokemonList: [Pokemon] = []
     @State private var searchText: String = ""
-    @State private var favorites: [Pokemon] = []
+    @Binding var favorites: [Pokemon]
+    @State private var reqPokemon: String?
     
     var body: some View {
         
@@ -86,4 +87,5 @@ struct BrowseView: View {
             }
         }.resume()
     }
+    
 }

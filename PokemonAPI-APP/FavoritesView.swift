@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct FavoritesView: View {
-    @State private var favorites: [Pokemon] = []
+    
+    @Binding var favorites: [Pokemon]
     
     var body: some View {
         NavigationView {
             List(favorites) { pokemon in
-                Text(pokemon.name.capitalized)
+                NavigationLink(destination: DetailView(pokemon: pokemon, favorites: $favorites)) {
+                    Text(pokemon.name.capitalized)
+                }
             }
             .navigationTitle("Favorites")
         }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     // display the opening screen
     var body: some View {
         MainTabView()
